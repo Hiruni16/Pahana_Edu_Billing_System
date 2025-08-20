@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahana Edu Bookshop - Items</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="books" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="2" height="15" x="2" y="2" fill="rgba(255,255,255,0.1)"/><rect width="2" height="12" x="6" y="5" fill="rgba(255,255,255,0.1)"/><rect width="2" height="18" x="10" y="1" fill="rgba(255,255,255,0.1)"/><rect width="2" height="14" x="14" y="3" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="20" fill="url(%23books)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1edff 0%, #a8e6cf 100%);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Search Bar Styles */
+        .search-section {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d1ecf1 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #bee5eb;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .search-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 60px 18px 20px;
+            border: 2px solid #17a2b8;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.1);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #138496;
+            box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.3);
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #17a2b8;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-result-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background: linear-gradient(135deg, #e8f4fd 0%, #d1ecf1 100%);
+            transform: translateX(5px);
+        }
+
+        .search-result-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .search-result-category {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .search-result-price {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Popup Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to { 
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .close:hover,
+        .close:focus {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .item-detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .detail-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .detail-card:hover {
+            border-color: #17a2b8;
+            box-shadow: 0 10px 25px rgba(23, 162, 184, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .detail-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .detail-value.price {
+            color: #28a745;
+            font-size: 24px;
+        }
+
+        .detail-value.category {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #dee2e6;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, select {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input::placeholder {
+            color: #adb5bd;
+        }
+
+        /* Enhanced Select Styling */
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            padding-right: 50px;
+        }
+
+        select:hover {
+            border-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        /* Category Option Groups Styling */
+        optgroup {
+            font-weight: bold;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            padding: 8px;
+        }
+
+        option {
+            padding: 8px 12px;
+            color: #495057;
+            background-color: white;
+        }
+
+        option:hover {
+            background-color: #e9ecef;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(149, 165, 166, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 5px;
+        }
+
+        .table-header h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        th {
+            padding: 20px 15px;
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f8f9fa;
+            color: #495057;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .price-tag {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .category-tag {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: 100%;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 20px auto;
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+            }
+
+            .item-detail-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="admin_dashboard.html" class="back-btn">
+                ← Back to Dashboard
+            </a>
+            <h1>📦 Pahana Edu Bookshop</h1>
+            <p>Items Management System</p>
+        </div>
+        
+        <div class="content">
+            <div id="alertContainer"></div>
+            
+            <!-- Search Section -->
+            <div class="search-section">
+                <h3> Search Items</h3>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search for items by name..." />
+                    <button class="search-btn" onclick="performSearch()">🔍</button>
+                    <div class="search-results" id="searchResults"></div>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalItems">0</div>
+                    <div class="stat-label">Total Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalCategories">0</div>
+                    <div class="stat-label">Total Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="totalPrice">Rs. 0</div>
+                    <div class="stat-label">Total Price</div>
+                </div>
+            </div>
+
+            <!-- Add/Update Item Form -->
+            <div class="form-section">
+                <h3> Add / Update Item</h3>
+                <div class="form-grid">
+                    <input type="hidden" id="item_id">
+                    
+                    <div class="form-group">
+                        <label for="item_name">Item Name</label>
+                        <input type="text" id="item_name" placeholder="Enter item name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item_category"> Item Category</label>
+                        <select id="item_category">
+                            <option value="">-- Select a category --</option>
+                            
+                            <optgroup label=" Literature & Fiction">
+                                <option value="Fiction"> Fiction</option>
+                                <option value="Literature & Poetry">️ Literature & Poetry</option>
+                                <option value="Comics & Graphic Novels"> Comics & Graphic Novels</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Educational & Academic">
+                                <option value="Educational / Textbooks"> Educational / Textbooks</option>
+                                <option value="Reference Books"> Reference Books (Dictionaries, Encyclopedias)</option>
+                                <option value="Language Learning">️ Language Learning</option>
+                                <option value="Exam Preparation"> Exam Preparation (IELTS, A/L, O/L)</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Age-Specific Books">
+                                <option value="Children's Books"> Children's Books</option>
+                                <option value="Young Adult (YA)"> Young Adult (YA)</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Knowledge & Development">
+                                <option value="Non-Fiction"> Non-Fiction</option>
+                                <option value="Science & Technology"> Science & Technology</option>
+                                <option value="Self-help / Personal Development"> Self-help / Personal Development</option>
+                                <option value="Business & Economics"> Business & Economics</option>
+                            </optgroup>
+                            
+                            <optgroup label=" People & Stories">
+                                <option value="Biographies & Memoirs"> Biographies & Memoirs</option>
+                                <option value="History & Politics">️ History & Politics</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Arts & Culture">
+                                <option value="Art, Photography & Design"> Art, Photography & Design</option>
+                                <option value="Religion & Spirituality">️ Religion & Spirituality</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Lifestyle & Practical">
+                                <option value="Travel Guides">️ Travel Guides</option>
+                                <option value="Cookbooks / Food & Drink"> Cookbooks / Food & Drink</option>
+                                <option value="Health & Wellness"> Health & Wellness</option>
+                            </optgroup>
+                            
+                            <optgroup label="️ Stationery">
+                                <option value="Notebooks & Diaries"> Notebooks & Diaries</option>
+                                <option value="Pens, Pencils & Markers">️ Pens, Pencils & Markers</option>
+                                <option value="Files & Folders"> Files & Folders</option>
+                                <option value="Staplers, Punchers, & Scissors">️ Staplers, Punchers, & Scissors</option>
+                                <option value="Envelopes & Writing Pads">️ Envelopes & Writing Pads</option>
+                                <option value="Rulers & Geometry Boxes"> Rulers & Geometry Boxes</option>
+                                <option value="Sticky Notes & Highlighters">️ Sticky Notes & Highlighters</option>
+                                <option value="Erasers & Sharpeners"> Erasers & Sharpeners</option>
+                            </optgroup>
+                            
+                            <optgroup label=" Educational Supplies">
+                                <option value="School Bags"> School Bags</option>
+                                <option value="Art Supplies (Crayons, Paints, Brushes)"> Art Supplies (Crayons, Paints, Brushes)</option>
+                                <option value="Educational Charts & Posters"> Educational Charts & Posters</option>
+                                <option value="Lab Materials"> Lab Materials (for advanced bookshops)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item_price">Item Price (Rs)</label>
+                        <input type="number" id="item_price" placeholder="Enter item price" step="0.01">
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="addOrUpdateItem()">
+                         Save Item
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearForm()">
+                        ️ Clear Form
+                    </button>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <div class="table-header">
+                <h3> Items List</h3>
+            </div>
+
+            <div class="table-container">
+                <table id="itemTable">
+                    <thead>
+                        <tr>
+                            <th> ID</th>
+                            <th> Item Name</th>
+                            <th> Category</th>
+                            <th> Price</th>
+                            <th>️ Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="itemTableBody">
+                        <tr>
+                            <td colspan="5" class="loading">Loading items...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Details Modal -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2> Item Details</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="item-detail-grid">
+                    <div class="detail-card">
+                        <div class="detail-label">Item ID</div>
+                        <div class="detail-value" id="modal-item-id">#0000</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Item Name</div>
+                        <div class="detail-value" id="modal-item-name">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Category</div>
+                        <div class="detail-value category" id="modal-item-category">-</div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-label">Price</div>
+                        <div class="detail-value price" id="modal-item-price">Rs. 0.00</div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" onclick="editFromModal()">
+                        ️ Edit Item
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteFromModal()">
+                        ️ Delete Item
+                    </button>
+                    <button class="btn btn-secondary" onclick="closeModal()">
+                         Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://localhost:8080/Pahana_Edu_Backend/pahana/item";
+        let allItems = [];
+        let currentModalItem = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchItems();
+            setupSearchEvents();
+        });
+
+        function setupSearchEvents() {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                if (query.length > 0) {
+                    showSearchResults(query);
+                } else {
+                    hideSearchResults();
+                }
+            });
+            
+            searchInput.addEventListener('focus', function() {
+                if (this.value.trim().length > 0) {
+                    showSearchResults(this.value.trim());
+                }
+            });
+            
+            // Hide search results when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!document.querySelector('.search-container').contains(e.target)) {
+                    hideSearchResults();
+                }
+            });
+            
+            // Handle Enter key for search
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query.length > 0) {
+                showSearchResults(query);
+            }
+        }
+
+        function showSearchResults(query) {
+            const searchResults = document.getElementById('searchResults');
+            const filteredItems = allItems.filter(item => 
+                item.item_name.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (filteredItems.length === 0) {
+                searchResults.innerHTML = '<div class="search-result-item" style="text-align: center; color: #6c757d;">No items found matching "' + query + '"</div>';
+            } else {
+                searchResults.innerHTML = filteredItems.map(item => `
+                    <div class="search-result-item" onclick="showItemDetails(${item.item_id})">
+                        <div>
+                            <div class="search-result-name">${item.item_name}</div>
+                            <div class="search-result-category">${item.item_category}</div>
+                        </div>
+                        <div class="search-result-price">Rs. ${item.item_price.toFixed(2)}</div>
+                    </div>
+                `).join('');
+            }
+            
+            searchResults.style.display = 'block';
+        }
+
+        function hideSearchResults() {
+            document.getElementById('searchResults').style.display = 'none';
+        }
+
+        function showItemDetails(itemId) {
+            const item = allItems.find(i => i.item_id === itemId);
+            if (item) {
+                currentModalItem = item;
+                document.getElementById('modal-item-id').textContent = '#' + item.item_id;
+                document.getElementById('modal-item-name').textContent = item.item_name;
+                document.getElementById('modal-item-category').textContent = item.item_category;
+                document.getElementById('modal-item-price').textContent = 'Rs. ' + item.item_price.toFixed(2);
+                
+                document.getElementById('itemModal').style.display = 'block';
+                hideSearchResults();
+                document.getElementById('searchInput').value = '';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('itemModal').style.display = 'none';
+            currentModalItem = null;
+        }
+
+        function editFromModal() {
+            if (currentModalItem) {
+                editItem(currentModalItem);
+                closeModal();
+            }
+        }
+
+        function deleteFromModal() {
+            if (currentModalItem) {
+                deleteItem(currentModalItem.item_id);
+                closeModal();
+            }
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('itemModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        function showAlert(message, type = 'success') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 4000);
+        }
+
+        function updateStats(items) {
+            document.getElementById('totalItems').textContent = items.length;
+            
+            const categories = [...new Set(items.map(item => item.item_category))];
+            document.getElementById('totalCategories').textContent = categories.length;
+            
+            const totalPrice = items.reduce((sum, item) => sum + item.item_price, 0).toFixed(2);
+            document.getElementById('totalPrice').textContent = `Rs. ${totalPrice}`;
+        }
+
+        function fetchItems() {
+            const tbody = document.getElementById("itemTableBody");
+            tbody.innerHTML = '<tr><td colspan="5" class="loading">Loading items...</td></tr>';
+
+            fetch(API_URL)
+                .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch items');
+                    return res.json();
+                })
+                .then(data => {
+                    allItems = data; // Store for search functionality
+                    tbody.innerHTML = "";
+                    updateStats(data);
+
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #6c757d;">No items found. Add your first item!</td></tr>';
+                        return;
+                    }
+
+                    data.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td><strong>#${item.item_id}</strong></td>
+                            <td><strong>${item.item_name}</strong></td>
+                            <td><span class="category-tag">${item.item_category}</span></td>
+                            <td><span class="price-tag">Rs. ${item.item_price.toFixed(2)}</span></td>
+                            <td class="actions">
+                                <button class="btn btn-warning" onclick='editItem(${JSON.stringify(item)})'>
+                                    ️ Edit
+                                </button>
+                                <button class="btn btn-danger" onclick='deleteItem(${item.item_id})'>
+                                    ️ Delete
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching items:", error);
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #e74c3c;"> Failed to load items. Please try again.</td></tr>';
+                    showAlert('Failed to load items: ' + error.message, 'error');
+                });
+        }
+
+        function collectFormData() {
+            return {
+                item_id: document.getElementById("item_id").value,
+                item_name: document.getElementById("item_name").value.trim(),
+                item_category: document.getElementById("item_category").value.trim(),
+                item_price: parseFloat(document.getElementById("item_price").value)
+            };
+        }
+
+        function validateForm(data) {
+            if (!data.item_name) {
+                showAlert("Please enter an item name.", 'error');
+                document.getElementById("item_name").focus();
+                return false;
+            }
+            if (!data.item_category) {
+                showAlert("Please enter an item category.", 'error');
+                document.getElementById("item_category").focus();
+                return false;
+            }
+            if (!data.item_price || data.item_price <= 0) {
+                showAlert("Please enter a valid item price.", 'error');
+                document.getElementById("item_price").focus();
+                return false;
+            }
+            return true;
+        }
+
+        function addItem(item) {
+            fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(item)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to add item");
+                return res.json();
+            })
+            .then(() => {
+                showAlert("✅ Item added successfully!", 'success');
+                fetchItems();
+                clearForm();
+            })
+            .catch(err => {
+                console.error('Error adding item:', err);
+                showAlert(" Failed to add item: " + err.message, 'error');
+            });
+        }
+
+        function updateItem(item) {
+            fetch(`${API_URL}/${item.item_id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(item)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to update item");
+                return res.json();
+            })
+            .then(() => {
+                showAlert(" Item updated successfully!", 'success');
+                fetchItems();
+                clearForm();
+            })
+            .catch(err => {
+                console.error('Error updating item:', err);
+                showAlert(" Failed to update item: " + err.message, 'error');
+            });
+        }
+
+        function deleteItem(id) {
+            if (!confirm("️ Are you sure you want to delete this item?")) return;
+
+            fetch(`${API_URL}/${id}`, {
+                method: "DELETE"
+            })
+            .then(res => {
+                if (!res.ok) throw new Error("Failed to delete item");
+                return res.json();
+            })
+            .then(() => {
+                showAlert("️ Item deleted successfully!", 'success');
+                fetchItems();
+            })
+            .catch(err => {
+                console.error('Error deleting item:', err);
+                showAlert(" Failed to delete item: " + err.message, 'error');
+            });
+        }
+
+        function addOrUpdateItem() {
+            const item = collectFormData();
+            if (!validateForm(item)) return;
+
+            if (item.item_id === "") {
+                delete item.item_id; // remove item_id before sending
+                addItem(item);
+            } else {
+                updateItem(item);
+            }
+        }
+
+        function editItem(item) {
+            document.getElementById("item_id").value = item.item_id;
+            document.getElementById("item_name").value = item.item_name;
+            document.getElementById("item_category").value = item.item_category;
+            document.getElementById("item_price").value = item.item_price;
+            
+            // Scroll to form
+            document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+            showAlert("Item loaded for editing. Make your changes and click Save.", 'success');
+        }
+
+        function clearForm() {
+            document.getElementById("item_id").value = "";
+            document.getElementById("item_name").value = "";
+            document.getElementById("item_category").value = "";
+            document.getElementById("item_price").value = "";
+        }
+    </script>
+</body>
+</html>

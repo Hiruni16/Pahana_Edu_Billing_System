@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pahana Edu - Detailed Help Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="books" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="2" height="15" x="2" y="2" fill="rgba(255,255,255,0.1)"/><rect width="2" height="12" x="6" y="5" fill="rgba(255,255,255,0.1)"/><rect width="2" height="18" x="10" y="1" fill="rgba(255,255,255,0.1)"/><rect width="2" height="14" x="14" y="3" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="20" fill="url(%23books)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+
+        .detail-content {
+            color: #6c757d;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .highlight {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .tip-box .tip-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .footer-navigation {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .footer-back-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .footer-back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+            background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .back-btn {
+                position: static;
+                margin-bottom: 20px;
+                align-self: flex-start;
+            }
+
+            .header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="admin_dashboard.html" class="back-btn">
+                ← Back
+            </a>
+            <h1>📚 Pahana Edu Bookshop - System Guide</h1>
+            <p>Comprehensive navigation and usage instructions</p>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="section">
+            <h2><span class="section-icon">📊</span> Dashboard</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Displays total customers, total items, and total revenue with real-time metrics and performance indicators.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Click the <span class="highlight">"Sign In"</span> button in the access directly from the main navigation menu.</div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Tip:</div>
+                <div>Use the quick view cards to monitor performance at a glance. The dashboard shows current statistics. Quick action buttons allow immediate access to add customers, books, create bills, and get help.</div>
+            </div>
+        </div>
+
+        <!-- Customer Management Section -->
+        <div class="section">
+            <h2><span class="section-icon">👥</span> Customer Management</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Add, view, update, search or delete customer details including account numbers, names, addresses, and contact information.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Use the sidebar menu <span class="highlight">"Customer Management"</span> or click "Access Customer Panel" from the dashboard.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Key Features:</div>
+                <div class="detail-content">
+                    • Search customers by name with real-time filtering<br>
+                    • Add new customers with account number, name, address, and phone<br>
+                    • Update existing customer information<br>
+                    • Delete customer records with confirmation<br>
+                    • View customer list with sortable columns (ID, Account No, Name, Address, Telephone)
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Tip:</div>
+                <div>Double-check contact numbers before saving. Editing requires selecting the customer from the list. Use the search function to quickly locate customers in larger databases.</div>
+            </div>
+        </div>
+
+        <!-- Item Management Section -->
+        <div class="section">
+            <h2><span class="section-icon">📦</span> Item Management</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Control inventory, add new books, update prices, and manage stock levels across all educational materials and categories.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Navigate using the sidebar <span class="highlight">"Item Management"</span> section or click "Access Inventory Panel" from the dashboard.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Management Features:</div>
+                <div class="detail-content">
+                    • Search items by name<br>
+                    • Add new books with name, category, and pricing<br>
+                    • Update existing item information<br>
+                    • Categorize books for better organization<br>
+                    • Edit and delete options for each item
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Tip:</div>
+                <div>Organize inventory by categories for easier management. Update prices regularly and ensure all educational materials are properly categorized. Use the search function to quickly locate specific books.</div>
+            </div>
+        </div>
+
+        <!-- Billing Management Section -->
+        <div class="section">
+            <h2><span class="section-icon">💵</span> Billing Management</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Process transactions, generate invoices, track payments, and manage financial records with automatic calculations and comprehensive billing history.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Access through the sidebar <span class="highlight">"Bill Management"</span> menu or click "Access Billing Panel" from the dashboard.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Billing Process:</div>
+                <div class="detail-content">
+                    • Select customer from dropdown menu<br>
+                    • Choose item from available inventory<br>
+                    • Enter quantity (units consumed)<br>
+                    • System automatically calculates total price<br>
+                    • Save bill to generate transaction record
+                </div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">Bill Management Features:</div>
+                <div class="detail-content">
+                    • Search bills by customer name, bill ID, or item name<br>
+                    • View detailed bill information<br>
+                    • Print bills for physical records<br>
+                    • Delete bills when necessary<br>
+                    • Track customer purchase history
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Tip:</div>
+                <div>Verify customer and item selection before saving bills. Use the automatic calculation feature to ensure accuracy. Regularly review unpublished bills and update their status as needed. Keep track of payment status and customer purchase patterns.</div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="section">
+            <h2><span class="section-icon">🚀</span> Help & Support</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Access comprehensive system documentation, troubleshooting guides, and contact information for technical support.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Click the <span class="highlight">"Help Section"</span> button in the quick actions area or navigate through the main menu.</div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Support:</div>
+                <div>For personalized assistance, contact our support team at: support@pahanaedu.lk. The help center provides detailed guides for each system component with step-by-step instructions.</div>
+            </div>
+        </div>
+
+        <!-- Exit Section -->
+        <div class="section">
+            <h2><span class="section-icon">🚪</span> System Exit</h2>
+            
+            <div class="detail-item">
+                <div class="detail-label">Overview:</div>
+                <div class="detail-content">Securely log out of the system to protect user data and maintain system integrity when session is complete.</div>
+            </div>
+            
+            <div class="detail-item">
+                <div class="detail-label">How to get there:</div>
+                <div class="detail-content">Use the logout option typically located in the user profile area.</div>
+            </div>
+            
+            <div class="tip-box">
+                <div class="tip-label"> Security Tip:</div>
+                <div>Always log out properly when leaving the system, especially on shared computers. This ensures data security and prevents unauthorized access to sensitive bookshop information.</div>
+            </div>
+        </div>
+
+       
+    </div>
+
+    <script>
+        function goToDashboard() {
+            // Replace this with your actual dashboard URL or navigation logic
+            // For example: window.location.href = 'dashboard.html';
+            alert('Navigating back to dashboard...\n\nReplace this alert with your actual dashboard navigation logic.');
+        }
+    </script>
+</body>
+</html>

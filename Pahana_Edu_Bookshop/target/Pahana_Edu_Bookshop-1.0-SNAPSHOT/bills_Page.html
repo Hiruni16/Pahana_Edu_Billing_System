@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Html.html to edit this template
+-->
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahana Edu Bookshop - Bills</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 20"><defs><pattern id="books" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="2" height="15" x="2" y="2" fill="rgba(255,255,255,0.1)"/><rect width="2" height="12" x="6" y="5" fill="rgba(255,255,255,0.1)"/><rect width="2" height="18" x="10" y="1" fill="rgba(255,255,255,0.1)"/><rect width="2" height="14" x="14" y="3" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="20" fill="url(%23books)"/></svg>') repeat;
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d1edff 0%, #a8e6cf 100%);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid #dee2e6;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Search Section Styles */
+        .search-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .search-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e9ecef;
+            border-radius: 50px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1), 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 18px;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .search-result-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-item:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transform: translateX(5px);
+        }
+
+        .search-result-customer {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .search-result-details {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .search-result-price {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, select {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input[readonly] {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #16a34a;
+            font-weight: 600;
+        }
+
+        input::placeholder {
+            color: #adb5bd;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-info:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(23, 162, 184, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #8e44ad 0%, #9b59b6 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+        }
+
+        .btn-print:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(142, 68, 173, 0.3);
+        }
+
+        .btn-printed {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            min-width: auto;
+            cursor: not-allowed;
+        }
+
+        .btn-clear {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            color: white;
+        }
+
+        .btn-clear:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(149, 165, 166, 0.3);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #dee2e6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        th {
+            padding: 20px 15px;
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f8f9fa;
+            color: #495057;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .price-display {
+            font-weight: 700;
+            color: #16a34a;
+            font-size: 1.1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .units-badge {
+            background: #e0e7ff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: #3730a3;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .customer-tag {
+            background: #e3f2fd;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .status-printed {
+            background: #f3f4f6;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+
+        .status-unprinted {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 25px 30px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .bill-details {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row.total {
+            background: linear-gradient(135deg, #e8f5e8 0%, #d4edda 100%);
+            margin: 15px -10px -10px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #155724;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-value {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .bill-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .bill-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .bill-subtitle {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Hidden print container - optimized for single page */
+        .print-only {
+            display: none;
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            z-index: -1;
+        }
+
+        /* Print Styles - Optimized for single page A4 */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Hide everything except print content */
+            body > *:not(.print-only) {
+                display: none !important;
+                visibility: hidden !important;
+            }
+
+            .print-only {
+                display: block !important;
+                position: static !important;
+                top: auto !important;
+                left: auto !important;
+                width: 100% !important;
+                height: 100vh !important;
+                margin: 0 !important;
+                padding: 15mm !important;
+                z-index: auto !important;
+                font-family: 'Segoe UI', Arial, sans-serif !important;
+                font-size: 12pt !important;
+                line-height: 1.4 !important;
+                page-break-after: avoid !important;
+            }
+
+            .print-receipt {
+                max-width: 100% !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            .receipt-header {
+                text-align: center !important;
+                border-bottom: 2px solid #333 !important;
+                padding-bottom: 10pt !important;
+                margin-bottom: 15pt !important;
+            }
+
+            .receipt-title {
+                font-size: 18pt !important;
+                font-weight: bold !important;
+                margin-bottom: 3pt !important;
+                color: #2c3e50 !important;
+            }
+
+            .receipt-subtitle {
+                font-size: 10pt !important;
+                color: #666 !important;
+                margin-bottom: 2pt !important;
+            }
+
+            .receipt-info {
+                margin-bottom: 12pt !important;
+            }
+
+            .receipt-row {
+                display: flex !important;
+                justify-content: space-between !important;
+                margin-bottom: 4pt !important;
+                padding: 2pt 0 !important;
+                page-break-inside: avoid !important;
+            }
+
+            .receipt-row.total {
+                border-top: 2px solid #333 !important;
+                border-bottom: 2px double #333 !important;
+                font-weight: bold !important;
+                font-size: 14pt !important;
+                margin-top: 10pt !important;
+                padding-top: 6pt !important;
+            }
+
+            .receipt-footer {
+                text-align: center !important;
+                margin-top: 15pt !important;
+                padding-top: 10pt !important;
+                border-top: 1px dashed #666 !important;
+                font-size: 9pt !important;
+                color: #666 !important;
+            }
+
+            @page {
+                size: A4 !important;
+                margin: 15mm !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                min-width: 100%;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 2% auto;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .search-results {
+                position: fixed;
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                max-height: 50vh;
+                border-radius: 15px 15px 0 0;
+            }
+        }
+          
+    </style>
+</head>
+<body>
+
+    <div class="container">
+    <div class="header">
+      <a href="admin_dashboard.html" class="back-btn">← Back to Dashboard</a>
+      <h1>📊 Pahana Edu Bookshop</h1>
+      <p>Bill Management System</p>
+    </div>
+
+    <div class="content">
+      <div id="alertContainer"></div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalBills">0</div>
+          <div class="stat-label">Total Bills</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalRevenue">Rs. 0</div>
+          <div class="stat-label">Total Revenue</div>
+        </div>
+      </div>
+
+      <!-- Search Section -->
+      <div class="search-section">
+        <h3> Search Bill</h3>
+        <div class="search-container">
+          <div class="search-icon">🔍</div>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Search by customer name, bill ID, or item name..."
+          />
+          <div id="searchResults" class="search-results"></div>
+        </div>
+      </div>
+
+      <!-- Bill Form -->
+      <div class="form-section">
+        <h3> Create Bill</h3>
+        <form id="billForm">
+          <input type="hidden" id="bill_id" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="custom_id"> Customer</label>
+              <select id="custom_id" required>
+                <option value="">Select a customer...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="item_id"> Item</label>
+              <select id="item_id" required>
+                <option value="">Select an item...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="units_consumed"> Units Consumed</label>
+              <input type="number" id="units_consumed" min="1" placeholder="Enter quantity" required/>
+            </div>
+            <div class="form-group">
+              <label for="total_price"> Total Price (LKR)</label>
+              <input type="text" id="total_price" readonly placeholder="Calculated automatically"/>
+            </div>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary" id="submitBtn"> Save Bill</button>
+            <button type="button" class="btn btn-clear" onclick="clearForm()"> Clear Form</button>
+          </div>
+        </form>
+      </div>
+
+
+       <!-- Bill Table -->
+      <div class="table-container">
+        <table id="billsTable">
+          <thead>
+            <tr>
+              <th> Bill ID</th>
+              <th> Customer</th>
+              <th> Item</th>
+              <th> Units</th>
+              <th> Total Price</th>
+              <th> Status</th>
+              <th>️ Actions</th>
+            </tr>
+          </thead>
+          <tbody id="billsBody">
+            <tr>
+              <td colspan="7" class="loading">Loading bills...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Bill Modal -->
+  <div id="viewBillModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2> Bill Details</h2>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="bill-header">
+          <div class="bill-title">PAHANA EDU BOOKSHOP</div>
+          <div class="bill-subtitle">Educational Books & Supplies</div>
+        </div>
+        <div class="bill-details" id="billDetailsContent">
+          <!-- Bill details will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Print Container (for direct printing) -->
+  <div class="print-only" id="printContainer">
+    <div class="print-receipt" id="printReceipt"></div>
+  </div>
+
+  <script>
+    const API_BASE = "http://localhost:8080/Pahana_Edu_Backend/pahana";
+    let items = [], customers = [];
+    let printedBills = new Set(); // Track printed bills locally
+    let allBills = []; // Store all bills for search functionality
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initPage();
+      loadPrintedBills();
+      setupModal();
+      setupSearch();
+    });
+
+    // Setup search functionality
+    function setupSearch() {
+      const searchInput = document.getElementById('searchInput');
+      const searchResults = document.getElementById('searchResults');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.trim().toLowerCase();
+        
+        if (searchTerm.length < 2) {
+          searchResults.style.display = 'none';
+          return;
+        }
+        
+        const filteredBills = allBills.filter(bill => {
+          const customerName = getCustomerName(bill.custom_id).toLowerCase();
+          const itemName = getItemName(bill.item_id).toLowerCase();
+          const billId = bill.bill_id.toString();
+          
+          return customerName.includes(searchTerm) || 
+                 itemName.includes(searchTerm) || 
+                 billId.includes(searchTerm);
+        });
+        
+        displaySearchResults(filteredBills, searchTerm);
+      });
+      
+      // Hide search results when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-container')) {
+          searchResults.style.display = 'none';
+        }
+      });
+    }
+
+    // Display search results
+    function displaySearchResults(bills, searchTerm) {
+      const searchResults = document.getElementById('searchResults');
+      
+      if (bills.length === 0) {
+        searchResults.innerHTML = '<div class="no-results">🔍 No bills found matching your search</div>';
+        searchResults.style.display = 'block';
+        return;
+      }
+      
+      const resultsHTML = bills.map(bill => {
+        const customer = customers.find(c => c.customer_id === bill.custom_id);
+        const item = items.find(i => i.item_id === bill.item_id);
+        const isPrinted = isBillPrinted(bill.bill_id);
+        
+        return `
+          <div class="search-result-item" onclick="viewBillFromSearch(${bill.bill_id})">
+            <div>
+              <div class="search-result-customer">
+                 ${customer ? customer.name : 'Unknown Customer'} - Bill #${bill.bill_id}
+              </div>
+              <div class="search-result-details">
+                 ${item ? item.item_name : 'Unknown Item'} × ${bill.units_consumed}
+                ${isPrinted ? ' • <span style="color: #6b7280;"> Printed</span>' : ' • <span style="color: #1e40af;"> Unpublished</span>'}
+              </div>
+            </div>
+            <div class="search-result-price">Rs. ${parseFloat(bill.total_price).toFixed(2)}</div>
+          </div>
+        `;
+      }).join('');
+      
+      searchResults.innerHTML = resultsHTML;
+      searchResults.style.display = 'block';
+    }
+
+    // View bill from search results
+    function viewBillFromSearch(billId) {
+      document.getElementById('searchResults').style.display = 'none';
+      document.getElementById('searchInput').value = '';
+      viewBill(billId);
+    }
+
+    // Setup modal functionality
+    function setupModal() {
+      const modal = document.getElementById('viewBillModal');
+      const closeBtn = document.querySelector('.close');
+      
+      closeBtn.onclick = function() {
+        modal.style.display = 'none';
+      }
+      
+      window.onclick = function(event) {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      }
+    }
+
+    // Load printed bills from localStorage
+    function loadPrintedBills() {
+      const stored = localStorage.getItem('printedBills');
+      if (stored) {
+        printedBills = new Set(JSON.parse(stored));
+      }
+    }
+
+    // Save printed bills to localStorage
+    function savePrintedBills() {
+      localStorage.setItem('printedBills', JSON.stringify([...printedBills]));
+    }
+
+    // Check if bill is printed
+    function isBillPrinted(billId) {
+      return printedBills.has(billId);
+    }
+
+    // Mark bill as printed
+    function markBillAsPrinted(billId) {
+      printedBills.add(billId);
+      savePrintedBills();
+    }
+
+    function showAlert(message, type = 'success') {
+      const container = document.getElementById('alertContainer');
+      const alert = document.createElement('div');
+      alert.className = `alert alert-${type}`;
+      alert.textContent = message;
+      alert.style.display = 'block';
+      container.appendChild(alert);
+      setTimeout(() => alert.remove(), 4000);
+    }
+
+    function updateStats(bills) {
+      document.getElementById('totalBills').textContent = bills.length;
+      const totalRevenue = bills.reduce((sum, bill) => sum + parseFloat(bill.total_price), 0);
+      document.getElementById('totalRevenue').textContent = `Rs. ${totalRevenue.toFixed(2)}`;
+    }
+
+    async function loadDropdowns() {
+      try {
+        const customerRes = await fetch(`${API_BASE}/customer`);
+        customers = await customerRes.json();
+        const customerSelect = document.getElementById("custom_id");
+        customerSelect.innerHTML = "<option value=''>Select a customer...</option>";
+        customers.forEach(c => {
+          const option = document.createElement("option");
+          option.value = c.customer_id;
+          option.textContent = `${c.name} (${c.account_no})`;
+          customerSelect.appendChild(option);
+        });
+
+        const itemRes = await fetch(`${API_BASE}/item`);
+        items = await itemRes.json();
+        const itemSelect = document.getElementById("item_id");
+        itemSelect.innerHTML = "<option value=''>Select an item...</option>";
+        items.forEach(i => {
+          const option = document.createElement("option");
+          option.value = i.item_id;
+          option.textContent = `${i.item_name} - Rs.${i.item_price}`;
+          itemSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Dropdown load error:', error);
+        showAlert('Failed to load dropdowns: ' + error.message, 'error');
+      }
+    }
+
+    function calculatePrice() {
+      const itemId = parseInt(document.getElementById("item_id").value);
+      const units = parseInt(document.getElementById("units_consumed").value);
+      const item = items.find(i => i.item_id === itemId);
+      const totalPriceField = document.getElementById("total_price");
+      if (item && units > 0) {
+        const total = (item.item_price * units).toFixed(2);
+        totalPriceField.value = `Rs. ${total}`;
+      } else {
+        totalPriceField.value = "";
+      }
+    }
+
+    document.getElementById("item_id").addEventListener("change", calculatePrice);
+    document.getElementById("units_consumed").addEventListener("input", calculatePrice);
+
+    document.getElementById("billForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const submitBtn = document.getElementById('submitBtn');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = ' Processing...';
+      submitBtn.disabled = true;
+
+      try {
+        const billId = document.getElementById("bill_id").value;
+        const bill = {
+          custom_id: parseInt(document.getElementById("custom_id").value),
+          item_id: parseInt(document.getElementById("item_id").value),
+          units_consumed: parseInt(document.getElementById("units_consumed").value),
+          total_price: parseFloat(document.getElementById("total_price").value.replace('Rs. ', ''))
+        };
+
+        if (!validateBill(bill)) return;
+
+        const url = `${API_BASE}/bills${billId ? "/" + billId : ""}`;
+        const method = billId ? "PUT" : "POST";
+
+        const response = await fetch(url, {
+          method,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(bill)
+        });
+
+        if (response.ok) {
+          showAlert(` Bill ${billId ? "updated" : "created"} successfully!`, 'success');
+          clearForm();
+          await loadBills();
+        } else {
+          const error = await response.json();
+          showAlert(" Failed: " + (error.error || "Unknown error"), 'error');
+        }
+      } catch (error) {
+        console.error('Error saving bill:', error);
+        showAlert("️ Network error: " + error.message, 'error');
+      } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+      }
+    });
+
+    function validateBill(bill) {
+      if (!bill.custom_id) {
+        showAlert("Please select a customer.", 'error');
+        return false;
+      }
+      if (!bill.item_id) {
+        showAlert("Please select an item.", 'error');
+        return false;
+      }
+      if (!bill.units_consumed || bill.units_consumed < 1) {
+        showAlert("Enter a valid quantity.", 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function getCustomerName(id) {
+      const c = customers.find(c => c.customer_id === id);
+      return c ? c.name : `Customer #${id}`;
+    }
+
+    function getItemName(id) {
+      const i = items.find(i => i.item_id === id);
+      return i ? i.item_name : `Item #${id}`;
+    }
+
+    // View Bill Function
+    async function viewBill(billId) {
+      try {
+        const response = await fetch(`${API_BASE}/bills/${billId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch bill details');
+        }
+        
+        const bill = await response.json();
+        const customer = customers.find(c => c.customer_id === bill.custom_id);
+        const item = items.find(i => i.item_id === bill.item_id);
+        const unitPrice = (bill.total_price / bill.units_consumed).toFixed(2);
+        const isPrinted = isBillPrinted(bill.bill_id);
+        
+        // Get current date/time
+        const now = new Date().toLocaleString();
+        
+        const billDetailsHTML = `
+          <div class="detail-row">
+            <div class="detail-label"> Bill Number:</div>
+            <div class="detail-value"><strong>#${bill.bill_id}</strong></div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Viewed On:</div>
+            <div class="detail-value">${now}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Customer Name:</div>
+            <div class="detail-value">${customer ? customer.name : 'Unknown Customer'}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Account Number:</div>
+            <div class="detail-value">${customer ? customer.account_no : 'N/A'}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Item:</div>
+            <div class="detail-value">${item ? item.item_name : 'Unknown Item'}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Unit Price:</div>
+            <div class="detail-value">Rs. ${unitPrice}</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Quantity:</div>
+            <div class="detail-value">${bill.units_consumed} units</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label"> Print Status:</div>
+            <div class="detail-value">
+              <span class="status-badge ${isPrinted ? 'status-printed' : 'status-unprinted'}">
+                ${isPrinted ? '✓ Printed' : ' Unpublished'}
+              </span>
+            </div>
+          </div>
+          <div class="detail-row total">
+            <div class="detail-label"> TOTAL AMOUNT:</div>
+            <div class="detail-value">Rs. ${parseFloat(bill.total_price).toFixed(2)}</div>
+          </div>
+        `;
+        
+        document.getElementById('billDetailsContent').innerHTML = billDetailsHTML;
+        document.getElementById('viewBillModal').style.display = 'block';
+        
+      } catch (error) {
+        console.error('Error viewing bill:', error);
+        showAlert(' Failed to load bill details: ' + error.message, 'error');
+      }
+    }
+
+    async function loadBills() {
+      const tbody = document.getElementById("billsBody");
+      tbody.innerHTML = '<tr><td colspan="7" class="loading">Loading bills...</td></tr>';
+
+      try {
+        const response = await fetch(`${API_BASE}/bills`);
+        const bills = await response.json();
+        
+        allBills = bills; // Store for search functionality
+
+        tbody.innerHTML = "";
+        updateStats(bills);
+
+        if (bills.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:40px;"> No bills found.</td></tr>';
+          return;
+        }
+
+        bills.forEach(bill => {
+          const isPrinted = isBillPrinted(bill.bill_id);
+          const row = document.createElement("tr");
+          
+          // Create print button or printed status
+          const printButtonOrStatus = isPrinted 
+            ? `<button class="btn btn-printed" disabled> Printed</button>`
+            : `<button class="btn btn-print" onclick="printBillDirectly(${bill.bill_id})">️ Print</button>`;
+
+          // Create status badge
+          const statusBadge = isPrinted
+            ? `<span class="status-badge status-printed"> Printed</span>`
+            : `<span class="status-badge status-unprinted"> Unpublished</span>`;
+
+          row.innerHTML = `
+            <td><strong>#${bill.bill_id}</strong></td>
+            <td><span class="customer-tag">${getCustomerName(bill.custom_id)}</span></td>
+            <td><strong>${getItemName(bill.item_id)}</strong></td>
+            <td><span class="units-badge">${bill.units_consumed}</span></td>
+            <td class="price-display">Rs. ${parseFloat(bill.total_price).toFixed(2)}</td>
+            <td>${statusBadge}</td>
+            <td class="actions">
+              <button class="btn btn-info" onclick="viewBill(${bill.bill_id})">️ View</button>
+              ${printButtonOrStatus}
+              <button class="btn btn-danger" onclick="deleteBill(${bill.bill_id})">️ Delete</button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("Error loading bills:", error);
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:40px;">️ Error loading bills.</td></tr>';
+      }
+    }
+
+    // New direct print function with one-time restriction
+    async function printBillDirectly(billId) {
+      // Check if already printed
+      if (isBillPrinted(billId)) {
+        showAlert('️ This bill has already been printed and cannot be printed again.', 'error');
+        return;
+      }
+
+      try {
+        // Show loading state
+        showAlert('️ Preparing bill for printing...', 'success');
+        
+        const res = await fetch(`${API_BASE}/bills/${billId}`);
+        const bill = await res.json();
+        const customer = customers.find(c => c.customer_id === bill.custom_id);
+        const item = items.find(i => i.item_id === bill.item_id);
+        const unitPrice = (bill.total_price / bill.units_consumed).toFixed(2);
+        const now = new Date().toLocaleString();
+
+        const receiptHTML = `
+          <div class="receipt-header">
+            <div class="receipt-title">PAHANA EDU BOOKSHOP</div>
+            <div class="receipt-subtitle">Educational Books & Supplies</div>
+            <div class="receipt-subtitle">📧 info@pahanaedu.lk | 📞 +94 11 234 5678</div>
+          </div>
+          <div class="receipt-info">
+            <div class="receipt-row"><span><strong>Bill No:</strong></span><span>#${bill.bill_id}</span></div>
+            <div class="receipt-row"><span><strong>Date:</strong></span><span>${now}</span></div>
+            <div class="receipt-row"><span><strong>Customer:</strong></span><span>${customer.name}</span></div>
+            <div class="receipt-row"><span><strong>Account No:</strong></span><span>${customer.account_no}</span></div>
+          </div>
+          <div class="receipt-info">
+            <div class="receipt-row"><span><strong>Item:</strong></span><span>${item.item_name}</span></div>
+            <div class="receipt-row"><span><strong>Unit Price:</strong></span><span>Rs. ${unitPrice}</span></div>
+            <div class="receipt-row"><span><strong>Quantity:</strong></span><span>${bill.units_consumed}</span></div>
+            <div class="receipt-row"><span><strong>Subtotal:</strong></span><span>Rs. ${bill.total_price.toFixed(2)}</span></div>
+          </div>
+          <div class="receipt-row total">
+            <span>TOTAL AMOUNT:</span>
+            <span>Rs. ${bill.total_price.toFixed(2)}</span>
+          </div>
+          <div class="receipt-footer">
+            <p>Thank you for your business!</p>
+            <p>Visit us again soon!</p>
+            <p style="margin-top: 10pt;">Powered by Pahana Edu Management System</p>
+          </div>
+        `;
+
+        // Update the hidden print container
+        document.getElementById("printReceipt").innerHTML = receiptHTML;
+        
+        // Small delay to ensure content is rendered, then print
+        setTimeout(() => {
+          window.print();
+          
+          // Mark as printed and update UI after print dialog
+          markBillAsPrinted(billId);
+          showAlert(' Bill printed successfully! This bill can no longer be reprinted.', 'success');
+          
+          // Reload the bills table to reflect the new status
+          loadBills();
+        }, 100);
+
+      } catch (error) {
+        console.error('Print error:', error);
+        showAlert(' Failed to print bill: ' + error.message, 'error');
+      }
+    }
+
+    async function deleteBill(billId) {
+      if (!confirm("️ Are you sure you want to delete this bill?")) return;
+      
+      try {
+        const res = await fetch(`${API_BASE}/bills/${billId}`, { method: "DELETE" });
+        if (res.ok) {
+          // Remove from printed bills set if it was printed
+          printedBills.delete(billId);
+          savePrintedBills();
+          
+          showAlert("️ Bill deleted successfully!", 'success');
+          await loadBills();
+        } else {
+          showAlert(" Failed to delete bill.", 'error');
+        }
+      } catch (e) {
+        console.error(e);
+        showAlert("️ Network error: " + e.message, 'error');
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("billForm").reset();
+      document.getElementById("bill_id").value = "";
+      document.getElementById("total_price").value = "";
+    }
+
+    async function initPage() {
+      await loadDropdowns();
+      await loadBills();
+    }
+
+    // Add window beforeprint event to handle browser print dialog cancellation
+    window.addEventListener('beforeprint', function(e) {
+      // This event fires when print dialog opens
+      console.log('Print dialog opened');
+    });
+
+  </script>
+</body>
+</html>
