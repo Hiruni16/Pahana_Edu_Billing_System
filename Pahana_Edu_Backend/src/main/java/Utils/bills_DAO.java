@@ -113,7 +113,7 @@ public class bills_DAO {
         }
         System.out.println("===============================================");
 
-        // 🟢 Proceed with insert (you can comment this if just testing)
+        //  Proceed with insert (you can comment this if just testing)
         pstmt.setInt(1, bill.getCustom_id());
         pstmt.setInt(2, bill.getItem_id());
         pstmt.setInt(3, bill.getUnits_consumed());
