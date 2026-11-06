@@ -115,5 +115,4 @@ GitHub repository for deployment.
 
 ##👨‍💻 Author
 
-Chathurya Hiruni
-🔗 GitHub Profile
+D.M. Chathurya Hiruni Gunathilaka
